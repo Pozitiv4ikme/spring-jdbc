@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -17,6 +18,7 @@ import ua.lviv.iot.jdbc.domain.City;
 
 @Repository
 @RequiredArgsConstructor
+@Slf4j
 public class CityDaoImpl implements CityDao {
 
     private final JdbcTemplate jdbcTemplate;
@@ -31,18 +33,18 @@ public class CityDaoImpl implements CityDao {
     public City create(City entity) {
         KeyHolder keyHolder = new GeneratedKeyHolder();
 
-        jdbcTemplate.update(connection -> {
+        log.info("There are created rows " + jdbcTemplate.update(connection -> {
             PreparedStatement ps = connection.prepareStatement(CREATE, Statement.RETURN_GENERATED_KEYS);
             ps.setString(1, entity.getName());
             return ps;
-        }, keyHolder);
+        }, keyHolder));
 
         return new City(Objects.requireNonNull(keyHolder.getKey()).intValue(), entity.getName());
     }
 
     @Override
     public City update(City entity, Integer id) {
-        jdbcTemplate.update(UPDATE, entity.getName(), id);
+        log.info("There are updated rows " + jdbcTemplate.update(UPDATE, entity.getName(), id));
         return entity;
     }
 

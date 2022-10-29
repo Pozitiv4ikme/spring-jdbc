@@ -1,6 +1,9 @@
 spring:
   datasource:
-    driverClassName: com.mysql.jdbc.Driver
+    driverClassName: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3307/study_iot
     username: root
     password: root
+
+    banner:
+      location: classpath:banner.txt

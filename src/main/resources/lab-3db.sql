@@ -45,6 +45,7 @@ CREATE TABLE gym
     city_id        INT         NOT NULL,
     CONSTRAINT gym_pk PRIMARY KEY (id),
     FOREIGN KEY (city_id) REFERENCES city (id)
+        ON DELETE CASCADE
 ) ENGINE = INNODB;
 
 
@@ -74,6 +75,7 @@ CREATE TABLE personal_training
     trainer_id INT NOT NULL,
     CONSTRAINT personal_training_pk PRIMARY KEY (id),
     FOREIGN KEY (trainer_id) REFERENCES trainer (id)
+        ON DELETE CASCADE
 ) ENGINE = INNODB;
 
 
@@ -105,6 +107,7 @@ CREATE TABLE exercise
     type_of_muscle_load_on       VARCHAR(10),
     CONSTRAINT exercise_pk PRIMARY KEY (id),
     FOREIGN KEY (personal_exercise_machine_id) REFERENCES personal_exercise_machine (id)
+        ON DELETE CASCADE
 ) ENGINE = INNODB;
 
 -- Table: exercise personal training
@@ -112,8 +115,10 @@ CREATE TABLE exercise_personal_training
 (
     exercise_id          int NOT NULL,
     personal_training_id int NOT NULL,
-    FOREIGN KEY (exercise_id) REFERENCES exercise (id),
-    FOREIGN KEY (personal_training_id) REFERENCES personal_training (id),
+    FOREIGN KEY (exercise_id) REFERENCES exercise (id)
+        ON DELETE CASCADE,
+    FOREIGN KEY (personal_training_id) REFERENCES personal_training (id)
+        ON DELEtE CASCADE,
     PRIMARY KEY exercise_personal_training_pk (exercise_id, personal_training_id)
 );
 
@@ -137,8 +142,10 @@ CREATE TABLE free_group_training
     trainer_id            INT NOT NULL,
     free_group_program_id int NOT NULL,
     CONSTRAINT free_group_training_pk PRIMARY KEY (id),
-    FOREIGN KEY (trainer_id) REFERENCES trainer (id),
+    FOREIGN KEY (trainer_id) REFERENCES trainer (id)
+        ON DELETE CASCADE,
     FOREIGN KEY (free_group_program_id) REFERENCES free_group_program (id)
+        ON DELETE CASCADE
 ) ENGINE = INNODB;
 
 
@@ -164,6 +171,7 @@ CREATE TABLE client
     gender_id INT         NOT NULL,
     CONSTRAINT client_pk PRIMARY KEY (id),
     FOREIGN KEY (gender_id) REFERENCES gender (id)
+        ON DELETE CASCADE
 ) ENGINE = INNODB;
 
 
@@ -171,8 +179,10 @@ CREATE TABLE client_gym
 (
     gym_id    INT NOT NULL,
     client_id INT NOT NULL,
-    FOREIGN KEY (gym_id) REFERENCES gym (id),
-    FOREIGN KEY (client_id) REFERENCES client (id),
+    FOREIGN KEY (gym_id) REFERENCES gym (id)
+        ON DELETE CASCADE,
+    FOREIGN KEY (client_id) REFERENCES client (id)
+        ON DELETE CASCADE,
     PRIMARY KEY client_gym_pk (gym_id, client_id)
 ) ENGINE = INNODB;
 

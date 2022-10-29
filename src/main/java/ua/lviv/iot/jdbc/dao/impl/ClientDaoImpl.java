@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -18,13 +19,13 @@ import ua.lviv.iot.jdbc.domain.projection.ClientProjection;
 
 @Repository
 @RequiredArgsConstructor
+@Slf4j
 public class ClientDaoImpl implements ClientDao {
 
     private final JdbcTemplate jdbcTemplate;
 
     private static final String CREATE = "INSERT INTO client(name, surname, birthday, phone, gender_id) VALUES (?, ?, "
-        + "?, "
-        + "?, ?)";
+        + "?, ?, ?)";
     private static final String UPDATE = "UPDATE client SET name=?, surname=?, birthday=?, phone=?, gender_id=? WHERE "
         + "id=?";
     private static final String FIND_ALL = "SELECT * FROM client";
@@ -43,7 +44,7 @@ public class ClientDaoImpl implements ClientDao {
     public Client create(Client client) {
         KeyHolder keyHolder = new GeneratedKeyHolder();
 
-        jdbcTemplate.update(connection -> {
+        log.info("There are created rows " + jdbcTemplate.update(connection -> {
             PreparedStatement ps = connection.prepareStatement(CREATE, Statement.RETURN_GENERATED_KEYS);
             ps.setString(1, client.getName());
             ps.setString(2, client.getSurname());
@@ -51,7 +52,7 @@ public class ClientDaoImpl implements ClientDao {
             ps.setString(4, client.getPhone());
             ps.setInt(5, client.getGenderId());
             return ps;
-        }, keyHolder);
+        }, keyHolder));
 
         return new Client(Objects.requireNonNull(keyHolder.getKey()).intValue(), client.getName(), client.getSurname()
             , client.getBirthday(), client.getPhone(), client.getGenderId());
@@ -59,8 +60,8 @@ public class ClientDaoImpl implements ClientDao {
 
     @Override
     public Client update(Client client, Integer id) {
-        jdbcTemplate.update(UPDATE, client.getName(), client.getSurname(), client.getBirthday(),
-            client.getPhone(), client.getGenderId(), id);
+        log.info("There are updated rows " + jdbcTemplate.update(UPDATE, client.getName(), client.getSurname(),
+            client.getBirthday(), client.getPhone(), client.getGenderId(), id));
         return client;
     }
 

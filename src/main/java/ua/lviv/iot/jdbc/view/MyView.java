@@ -21,15 +21,17 @@ public class MyView {
     private final ClientGymView clientGymView;
     private final ExerciseView exerciseView;
     private final ExercisePersonalTrainingView exercisePersonalTrainingView;
+    private final FreeGroupProgramView freeGroupProgramView;
 
 
     public MyView(ClientView clientView, CityView cityView, ClientGymView clientGymView, ExerciseView exerciseView,
-        ExercisePersonalTrainingView exercisePersonalTrainingView) {
+        ExercisePersonalTrainingView exercisePersonalTrainingView, FreeGroupProgramView freeGroupProgramView) {
         this.clientView = clientView;
         this.cityView = cityView;
         this.clientGymView = clientGymView;
         this.exerciseView = exerciseView;
         this.exercisePersonalTrainingView = exercisePersonalTrainingView;
+        this.freeGroupProgramView = freeGroupProgramView;
 
         views = new ArrayList<>();
         views.add(clientView);
@@ -37,6 +39,7 @@ public class MyView {
         views.add(clientGymView);
         views.add(exerciseView);
         views.add(exercisePersonalTrainingView);
+        views.add(freeGroupProgramView);
 
         menu = new LinkedHashMap<>();
         methodsMenu = new LinkedHashMap<>();
@@ -62,6 +65,7 @@ public class MyView {
         clientGymView.getMethodsMenu().get("33").print();
         exerciseView.getMethodsMenu().get("44").print();
         exercisePersonalTrainingView.getMethodsMenu().get("53").print();
+        freeGroupProgramView.getMethodsMenu().get("64").print();
     }
 
     private void endApp() {

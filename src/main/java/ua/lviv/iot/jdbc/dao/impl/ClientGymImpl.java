@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -15,6 +16,7 @@ import ua.lviv.iot.jdbc.domain.projection.ClientGymProjection;
 
 @Repository
 @RequiredArgsConstructor
+@Slf4j
 public class ClientGymImpl implements ClientGymDao {
 
     private final  JdbcTemplate jdbcTemplate;
@@ -37,7 +39,7 @@ public class ClientGymImpl implements ClientGymDao {
 
     @Override
     public ClientGym create(ClientGym entity) {
-        jdbcTemplate.update(CREATE, entity.getGymId(), entity.getClientId());
+        log.info("There are created rows " + jdbcTemplate.update(CREATE, entity.getGymId(), entity.getClientId()));
         return entity;
     }
 

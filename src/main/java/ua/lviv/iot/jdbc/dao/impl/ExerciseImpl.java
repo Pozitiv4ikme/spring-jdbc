@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -19,6 +20,7 @@ import ua.lviv.iot.jdbc.domain.projection.ExerciseProjection;
 
 @Repository
 @RequiredArgsConstructor
+@Slf4j
 public class ExerciseImpl implements ExerciseDao {
 
     private final JdbcTemplate jdbcTemplate;
@@ -91,7 +93,7 @@ public class ExerciseImpl implements ExerciseDao {
     public Exercise create(Exercise entity) {
         KeyHolder keyHolder = new GeneratedKeyHolder();
 
-        jdbcTemplate.update(connection -> {
+        log.info("There are created rows " + jdbcTemplate.update(connection -> {
             PreparedStatement ps = connection.prepareStatement(CREATE, Statement.RETURN_GENERATED_KEYS);
             ps.setInt(1, entity.getNumberOfRepetitions());
             ps.setInt(2, entity.getApproach());
@@ -103,7 +105,7 @@ public class ExerciseImpl implements ExerciseDao {
             ps.setInt(4, entity.getPersonalExerciseMachineId());
             ps.setString(5, entity.getTypeOfMuscleLoadOn());
             return ps;
-        }, keyHolder);
+        }, keyHolder));
 
         return new Exercise(Objects.requireNonNull(keyHolder.getKey()).intValue(), entity.getNumberOfRepetitions(),
             entity.getApproach(), entity.getComplexity(), entity.getPersonalExerciseMachineId(), entity.getTypeOfMuscleLoadOn());
@@ -111,8 +113,9 @@ public class ExerciseImpl implements ExerciseDao {
 
     @Override
     public Exercise update(Exercise entity, Integer id) {
-         jdbcTemplate.update(UPDATE, entity.getNumberOfRepetitions(),
-            entity.getApproach(), entity.getComplexity(), entity.getPersonalExerciseMachineId(), entity.getTypeOfMuscleLoadOn(), id);
+        log.info("There are updated rows " + jdbcTemplate.update(UPDATE, entity.getNumberOfRepetitions(),
+            entity.getApproach(), entity.getComplexity(), entity.getPersonalExerciseMachineId(),
+            entity.getTypeOfMuscleLoadOn(), id));
 
          return entity;
     }

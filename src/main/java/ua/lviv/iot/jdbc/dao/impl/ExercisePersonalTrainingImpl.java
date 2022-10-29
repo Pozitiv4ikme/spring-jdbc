@@ -1,11 +1,18 @@
 package ua.lviv.iot.jdbc.dao.impl;
 
+import java.sql.PreparedStatement;
+import java.sql.Statement;
+import java.sql.Types;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 import ua.lviv.iot.jdbc.dao.ExercisePersonalTrainingDao;
 import ua.lviv.iot.jdbc.domain.ExercisePersonalTraining;
@@ -13,6 +20,7 @@ import ua.lviv.iot.jdbc.domain.projection.ExercisePersonalTrainingProjection;
 
 @Repository
 @RequiredArgsConstructor
+@Slf4j
 public class ExercisePersonalTrainingImpl implements ExercisePersonalTrainingDao {
 
     private final JdbcTemplate jdbcTemplate;
@@ -40,10 +48,10 @@ public class ExercisePersonalTrainingImpl implements ExercisePersonalTrainingDao
 
     @Override
     public ExercisePersonalTraining create(ExercisePersonalTraining entity) {
-        jdbcTemplate.update(CREATE, entity.getExerciseId(), entity.getPersonalTrainingId());
+        log.info("There are created rows " + jdbcTemplate.update(CREATE, entity.getExerciseId(),
+            entity.getPersonalTrainingId()));
         return entity;
     }
-
     @Override
     public int deleteExerciseForPersonalTraining(Integer exerciseId, Integer personalTrainingId) {
         return jdbcTemplate.update(DELETE_BY_EXERCISE_ID, exerciseId, personalTrainingId);
